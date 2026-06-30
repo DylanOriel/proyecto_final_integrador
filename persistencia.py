@@ -46,6 +46,7 @@ def eliminar_producto_sql(id_eliminar):
     return cursor.rowcount > 0
 
 def mostrar_todo_sql():
+    
     query = """
             SELECT * FROM productos ORDER BY id
     """
@@ -61,6 +62,9 @@ def mostrar_todo_sql():
         return []
     
 def reporte_stock_sql(limite):
+    '''
+    Genera un reporte de stock "faltante" ingresando un limite para filtrar aquellos productos que faltan
+    '''
     query = """
             SELECT * FROM productos WHERE cantidad <= ? ORDER BY cantidad ASC
     """
@@ -73,6 +77,12 @@ def reporte_stock_sql(limite):
         print(Back.LIGHTRED_EX + f"[ERROR] No se pudo generar el reporte: {e}" + Style.RESET_ALL)
         return []
 def modificar_producto_sql(id_modificar, columna, nuevo_valor):
+    '''
+    Puede modificar cualquier tipo de valor dentro de un producto sin tener que ingresar los datos
+    uno a uno
+    No hay peligro de SQL injection porque la variable de la columna es de la propia tabla
+    y de la que le pasa el usuario.
+    '''
     query = f"""
             UPDATE productos SET {columna} = ? WHERE id = ?
     """
@@ -89,6 +99,9 @@ def modificar_producto_sql(id_modificar, columna, nuevo_valor):
 #-----------ARCHIVO TXT------------
 
 def guardar_en_txt(lista_productos):
+    '''
+    Guarda los datos de una lista en un archivo txt llamado inventario
+    '''
     try:
         with open("inventario.txt", "w") as archivo_inventario:
             for producto in lista_productos:

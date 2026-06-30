@@ -16,19 +16,27 @@ def menu_registro_productos():
     print("7. Salir")
 
 def pedir_busqueda():
-
+    '''
+    Busqueda en caso de que quiera ver productos por su categoria o nombre
+    '''
     return input("Elegí una opción para buscar: ('1' para buscar por categoría | '2' para buscar por nombre)")
 
 def pedir_opcion_menu():
-
+    '''
+    Opciones del menu
+    '''
     return input("Elegí una opción (1-7): ")
 
 def pedir_opcion_modificar():
-
+    '''
+    Opciones que se piden para un menu en caso de querer modificar los datos de un producto
+    '''
     return input("Elegí una opción (1-6): ")
 
 def confirmar_continuar(accion):
-    
+    '''
+    Pido al usurio si quiere seguir con la accion 
+    '''
     return utilidades.confirmacion(f"¿Queres {accion} otro producto")
 
 def mostrar_producto(producto):
@@ -36,6 +44,7 @@ def mostrar_producto(producto):
     print(Back.LIGHTYELLOW_EX + f"ID : {producto['id']} | nombre : {producto['nombre']} | descripcion : {producto['descripcion']} | cantidad : {producto['cantidad']} | precio :$ {producto['precio']} | categoria : {producto['categoria']}" + Style.RESET_ALL)
     
 def mostrar_productos_todos(lista_productos):
+
     if not lista_productos:
         print(Back.LIGHTBLUE_EX + "\nNo hay productos cargados." + Style.RESET_ALL)
         return
@@ -48,8 +57,9 @@ def mostrar_productos_todos(lista_productos):
     w_pre = 15
     w_cat = 35
 
-    ancho_total = w_id + w_nom + w_des + w_can + w_pre + w_cat + 5 # +5 para espacios entre col
+    ancho_total = w_id + w_nom + w_des + w_can + w_pre + w_cat + 5 # +5 para espacios entre columnas
 
+    #Defino con fstrings el tamañano entre columnas
     header = (
         f"{'ID':<{w_id}}"
         f"{'NOMBRE':<{w_nom}}"
@@ -67,6 +77,7 @@ def mostrar_productos_todos(lista_productos):
         if len(desc) > w_des:
             desc = desc[:w_des-3] + "..."
 
+        #Forma en la que se ve a imprimir en la consola, mucho mas comodo que escribirlo todo en una linea
         fila = (
             f"{p['id']:<{w_id}} "
             f"{p['nombre'][:w_nom-1]:<{w_nom}} "
@@ -82,7 +93,9 @@ def mostrar_productos_todos(lista_productos):
     print("=" * ancho_total)
 
 def pedir_id(accion):
-
+    '''
+    Generalizo pedir un id, lo uso para modificar, eliminar o buscar un producto
+    '''
     return utilidades.validad_digit(f"\nIngresá el ID del producto a {accion}: ", minimo=1)
 
 def confirmar_eliminacion(nombre):
@@ -90,7 +103,7 @@ def confirmar_eliminacion(nombre):
     return utilidades.confirmacion(f"\n¿Estás seguro de eliminar '{nombre}'? ")
 
 def pedir_nombre_busqueda():
-
+  
     return utilidades.validad_str("\nIngresá el nombre a buscar: ", campo="nombre del producto")
 
 def pedir_categoria_busqueda():
@@ -98,7 +111,7 @@ def pedir_categoria_busqueda():
     return utilidades.validad_str("\nIngresá la categoria a buscar: ")
 
 def menu_modificar_producto():
-    """ Muestra del menu """
+    """ Muestra del menu para modificar productos """
     print("\n" + "=" * 50)
     print("             SISTEMA DE GESTION PARA MODIFICAR PRODUCTOS ")
     print("=" * 50)

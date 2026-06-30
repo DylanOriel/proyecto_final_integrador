@@ -6,6 +6,9 @@ from colorama import Back, Style, init
 init()
 
 def accion_agregar(lista_productos: list):
+    '''
+    Funcion que agrega a la lista y la BD el nuevo producto solicitado
+    '''
     while True:
         nuevo_producto = produc.registrar_productos()
         
@@ -27,10 +30,16 @@ def accion_agregar(lista_productos: list):
             break
 
 def accion_mostrar(lista_productos: list):
+    '''
+    Muesta todos los productos de la BD
+    '''
     print("\n=== Lista de Productos ===")
     menu.mostrar_productos_todos(lista_productos)
 
 def accion_buscar_nombre(lista_productos: list):
+    '''
+    Toma una lista y me devuelve otra con los nombres de los productos que coincidan con el solicitiado, lo mismo para la accion de categoria
+    '''
     while True:
         nombre      = menu.pedir_nombre_busqueda()
         resultados  = produc.buscar_por_nombre(lista_productos, nombre)
@@ -59,7 +68,11 @@ def accion_buscar_categoria(lista_productos: list):
             break
 
         
-def accion_eliminar(lista_productos: list): 
+def accion_eliminar(lista_productos: list):
+    '''
+    Elimino un producto de la BD de datos, pregunto confirmacion que en caso de ser afirmativo tambien se elimina del archivo
+    en caso contrario se cancela la accion
+    '''
     if not lista_productos:
         print(Back.LIGHTBLUE_EX + "La lista de productos está vacía. No hay nada para borrar. \n" + Style.RESET_ALL)
         return None
@@ -108,6 +121,10 @@ def accion_generar_reporte():
                 break
 
 def accion_modificar_producto(lista_productos: list):
+    '''
+    La logica es muy similar a la accion de eliminar producto, pero en este caso
+    se le pregunta al usuario que tipo de dato quiere modifar del producto solicitado
+    '''
     if not lista_productos:
         print(Back.LIGHTBLUE_EX + "La lista de productos está vacía. No hay nada para borrar. \n" + Style.RESET_ALL)
         return None
@@ -125,6 +142,7 @@ def accion_modificar_producto(lista_productos: list):
             print(Back.LIGHTBLUE_EX + f"\nSe encontro el producto: {producto_modificiar['nombre']} - ID: {producto_modificiar['id']}" + Style.RESET_ALL)
             menu.mostrar_producto(producto_modificiar)
         
+        #Opciones del campo a eliminar con una verificacion de tipo str o digito para poder usar la funcion que verifica si esta vacio el dato o no
         campos = {
             "1": ("Nombre", "nombre", "str"),
             "2": ("Descripción", "descripcion", "str"),
@@ -145,13 +163,12 @@ def accion_modificar_producto(lista_productos: list):
             if opcion in campos:
                 nombre_campo, nombre_columna_sql, tipo_dato = campos[opcion]
 
-                
-
                 if tipo_dato == "str":
                     nuevo_valor = utilidades.validad_str(f"Ingrese el nuevo {nombre_campo}: ")
                 elif tipo_dato == "digit":
                     nuevo_valor = utilidades.validad_digit(f"Ingrese el nuevo {nombre_campo}: ")
 
+                #paso el id del producto a modicar, el dato y su nuevo valor que luego se va a actualizar en la tabla de la BD
                 if query.modificar_producto_sql(id_modificar, nombre_columna_sql, nuevo_valor):
                     for p in lista_productos:
                         if p['id'] == id_modificar:
@@ -170,6 +187,7 @@ def accion_modificar_producto(lista_productos: list):
 
 def main():
 
+    #Genero la tabla (si no esta creada) y tambien inicio una lista vacia
     query.crear_tabla_sql()
     lista_productos = query.mostrar_todo_sql()
     print(Back.LIGHTBLUE_EX + "\n Sistema iniciado." + Style.RESET_ALL)
